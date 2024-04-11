@@ -1,0 +1,21 @@
+- name: Install chrony
+  apt:
+    update_cache: true
+    name:
+      - chrony
+    state: latest
+    update_cache: true
+
+- name: Configure chrony config
+  template:
+    src: files/chrony.conf
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable chrony
+  service:
+    name: chrony
+    enabled: true
+    state: restarted
