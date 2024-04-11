@@ -1,0 +1,6 @@
+---
+# handlers file for cockroach-systemd
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
