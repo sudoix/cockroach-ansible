@@ -1,0 +1,82 @@
+- name: Create directory to story download file
+  file:
+    path: /root/cockroach
+    state: directory
+    recurse: yes
+
+- name: Download cockroach binary
+  get_url:
+    url: "{{ cockroach_url }}"
+    dest: "/root/cockroach/{{ cockroach_file_name }}"
+    mode: 0755
+
+- name: Print cockroach file
+  debug:
+    msg: The cockroach file name is {{ cockroach_file_name }}
+
+- name: Extract cockroach binary
+  unarchive:
+    src: /root/cockroach/{{ cockroach_file_name }}
+    dest: /root/cockroach
+    remote_src: yes
+
+- name: Copy cockroach binary to PATH
+  shell:
+    cmd: cp /root/cockroach/cockroach-*/cockroach /usr/bin/cockroach
+
+- name: Find cockroach version
+  shell:
+    cmd: cockroach version
+  register: cockroach_version
+
+- name: Print cockroach version
+  debug:
+    msg: "{{ cockroach_version.stdout }}"
+
+- name: Create certificate directory
+  file:
+    path: "{{ cockroach_cert_dir }}"
+    state: directory
+    recurse: yes
+
+- name: Find all items in the directory
+  find:
+    paths: "{{ cockroach_cert_dir }}"
+    recurse: yes  # Set to 'no' if you do not want to delete items in subdirectories
+  register: files_to_delete
+
+- name: Delete all items found in the directory
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ files_to_delete.files }}"
+  when: files_to_delete.matched > 0
+
+- name: Create a CA certificate on node1
+  shell:
+    cmd: cockroach cert create-ca --certs-dir={{ cockroach_cert_dir }} --ca-key={{ cockroach_cert_dir }}/ca.key
+  when: inventory_hostname == groups['dbs'][0]
+
+- name: Synchronize certificate files from remote to local
+  synchronize:
+    src: "{{ cockroach_cert_dir }}"
+    dest: "roles/cockroach/files/certs/"
+    mode: pull
+    recursive: yes
+
+- name: Copy certificate from local to remote hosts
+  copy:
+    src: "roles/cockroach/files/certs/"
+    dest: "{{ cockroach_cert_dir }}"
+    mode: 0644
+    force: yes
+
+- name: Generate a client certificate
+  shell:
+    cmd: cockroach cert create-client root --certs-dir={{ cockroach_cert_dir }} --ca-key={{ cockroach_cert_dir }}/ca.key
+
+- name: Create cockroach cert node
+  shell:
+    cmd: cockroach cert create-node localhost {{ ansible_hostname }} {{ hostvars[inventory_hostname]['private_ip'] }} --certs-dir={{ cockroach_cert_dir }} --ca-key={{ cockroach_cert_dir }}/ca.key
+
+
