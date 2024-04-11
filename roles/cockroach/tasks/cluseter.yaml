@@ -1,0 +1,37 @@
+- name: Construct join IPs list
+  set_fact:
+    join_ips: "{{ groups['dbs'] | map('extract', hostvars, 'private_ip') | list | join(',') }}"
+
+- block:
+  - name: print command
+    debug:
+      msg: "cockroach start --background --certs-dir={{ cockroach_cert_dir }} --advertise-host={{ hostvars[inventory_hostname]['private_ip'] }} --join={{ join_ips }}"
+
+  - name: Start CockroachDB cluster
+    shell:
+      cmd: cockroach start --background --certs-dir={{ cockroach_cert_dir }} --advertise-host={{ hostvars[inventory_hostname]['private_ip'] }} --join={{ join_ips }}
+
+  - name: Wait for CockroachDB to start
+    pause:
+      seconds: 15
+
+  # - name: print command
+  #   debug:
+  #     msg: "cockroach init --certs-dir={{ cockroach_cert_dir }} --host={{ hostvars[inventory_hostname]['private_ip'] }}"
+
+  # - name: Init CockroachDB cluster
+  #   shell:
+  #     cmd: cockroach init --certs-dir={{ cockroach_cert_dir }} --host={{ hostvars[inventory_hostname]['private_ip'] }}
+  #   ignore_errors: true
+
+  when: inventory_hostname == groups['dbs'][0]
+
+- name: join other node to cluster
+  shell:
+    cmd: cockroach start --background
+        --certs-dir={{ cockroach_cert_dir }}
+        --advertise-host={{ hostvars[inventory_hostname]['private_ip'] }}
+        --listen-addr={{ hostvars[inventory_hostname]['private_ip'] }}
+        --join={{ hostvars[groups['dbs'][0]]['private_ip'] }}:{{ cockroach_port }}
+
+  when: inventory_hostname in groups['dbs'] and inventory_hostname != groups['dbs'][0]

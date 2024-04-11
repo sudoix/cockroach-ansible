@@ -1,0 +1,8 @@
+---
+# tasks file for cockroach
+
+- name: cockroach setup
+  include_tasks: cockroach.yaml
+
+- name: init cockroach cluster
+  include_tasks: cluseter.yaml

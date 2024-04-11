@@ -1,0 +1,13 @@
+- hosts: all
+  roles:
+    - role: preinstall
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [preinstall]
+
+- hosts: dbs
+  roles:
+    - role: cockroach
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [cockroach]
