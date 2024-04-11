@@ -7,7 +7,7 @@
 
 - hosts: dbs
   roles:
-    - role: cockroach
+    - role: cockroach-manual
   gather_facts: yes
   any_errors_fatal: true
-  tags: [cockroach]
+  tags: [cockroach_manual]
