@@ -11,3 +11,10 @@
   gather_facts: yes
   any_errors_fatal: true
   tags: [cockroach_manual]
+
+- hosts: dbs
+  roles:
+    - role: cockroach-systemd
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [cockroach_systemd]
