@@ -1,4 +1,4 @@
-- name: Create directory to story download file
+- name: Create directory to stor download file
   file:
     path: /root/cockroach
     state: directory
@@ -60,13 +60,13 @@
 - name: Synchronize certificate files from remote to local
   synchronize:
     src: "{{ cockroach_cert_dir }}"
-    dest: "roles/cockroach/files/certs/"
+    dest: "roles/cockroach-manual/files"
     mode: pull
     recursive: yes
 
 - name: Copy certificate from local to remote hosts
   copy:
-    src: "roles/cockroach/files/certs/"
+    src: "roles/cockroach-manual/files/certs/"
     dest: "{{ cockroach_cert_dir }}"
     mode: 0644
     force: yes
@@ -78,5 +78,3 @@
 - name: Create cockroach cert node
   shell:
     cmd: cockroach cert create-node localhost {{ ansible_hostname }} {{ hostvars[inventory_hostname]['private_ip'] }} --certs-dir={{ cockroach_cert_dir }} --ca-key={{ cockroach_cert_dir }}/ca.key
-
-

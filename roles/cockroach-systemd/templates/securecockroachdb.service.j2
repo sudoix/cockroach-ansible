@@ -1,0 +1,16 @@
+[Unit]
+Description=Cockroach Database cluster node
+Requires=network.target
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/cockroach
+ExecStart=/usr/bin/cockroach start --certs-dir=/var/lib/cockroach/certs --advertise-addr={{ hostvars[inventory_hostname]['private_ip'] }} --join={% for host in groups['dbs'] %}{{ hostvars[host]['private_ip'] }}{% if not loop.last %},{% endif %}{% endfor %} --cache=.25 --max-sql-memory=.25
+TimeoutStopSec=300
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=cockroach
+User=cockroach
+[Install]
+WantedBy=default.target

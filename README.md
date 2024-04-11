@@ -7,5 +7,9 @@ ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become
 ```
 
 ```
-ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become-method=sudo -t cockroach
+ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become-method=sudo -t cockroach-manual
+```
+
+```
+ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become-method=sudo -t cockroach_systemd
 ```

@@ -1,0 +1,5 @@
+---
+# tasks file for cockroach-systemd
+
+- name: cockroach-systemd setup
+  include_tasks: cockroach-systemd.yaml
