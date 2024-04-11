@@ -17,3 +17,4 @@ cockroach_url: "https://binaries.cockroachdb.com/cockroach-v23.2.2.linux-amd64.t
 cockroach_file_name: "cockroach-v23.2.2.linux-amd64.tgz"
 cockroach_port: "26257"
 cockroach_cert_dir: "/root/certs"
+cockroach_lib_dir: "/usr/local/lib/cockroach"
