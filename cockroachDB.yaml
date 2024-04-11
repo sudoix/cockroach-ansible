@@ -18,3 +18,10 @@
   gather_facts: yes
   any_errors_fatal: true
   tags: [cockroach_systemd]
+
+- hosts: haproxy
+  roles:
+    - role: haproxy
+  gather_facts: yes
+  any_errors_fatal: true
+  tags: [haproxy]

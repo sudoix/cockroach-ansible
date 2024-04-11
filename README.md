@@ -13,3 +13,7 @@ ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become
 ```
 ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become-method=sudo -t cockroach_systemd
 ```
+
+```
+ansible-playbook -i inventory/db-servers.ini cockroachDB.yaml  --become --become-method=sudo -t haproxy
+```
