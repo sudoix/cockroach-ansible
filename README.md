@@ -1,5 +1,7 @@
 # cockroach-ansible
 
+![cockroach](./cockroach_db.jpg)
+
 ### How to use
 
 ```bash
