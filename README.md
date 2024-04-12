@@ -4,26 +4,26 @@ This repository hosts an Ansible playbook designed for the seamless deployment a
 
 ### Architecture Overview
 
-                            +------------------+
-                            |  Client Access   |
-                            +--------+---------+
-                                     |
-                                     |
-                            +--------v--------+
-                            |   HAProxy       |
-                            | (Load Balancer) |
-                            +--------+--------+
-                                     |
-                                     |
-                +--------------------+---------------------+
-                |                    |                     |
-                |                    |                     |
-                v                    v                     v
-        +-------+--------+   +-------+--------+    +-------+--------+
-        |  Server 1      |   |  Server 2      |    |  Server 3      |
-        |  (CockroachDB) |   |  (CockroachDB) |    |  (CockroachDB) |
-        |  IP: 10.0.1.1  |   |  IP: 10.0.1.2  |    |  IP: 10.0.1.3  |
-        +-------+--------+   +-------+--------+    +-------+--------+
+                                        +------------------+
+                                        |  Client Access   |
+                                        +--------+---------+
+                                                 |
+                                                 |
+                                        +--------v--------+
+                                        |   HAProxy       |
+                                        | (Load Balancer) |
+                                        +--------+--------+
+                                                 |
+                                                 |
+                            +--------------------+---------------------+
+                            |                    |                     |
+                            |                    |                     |
+                            v                    v                     v
+                    +-------+--------+   +-------+--------+    +-------+--------+
+                    |  Server 1      |   |  Server 2      |    |  Server 3      |
+                    |  (CockroachDB) |   |  (CockroachDB) |    |  (CockroachDB) |
+                    |  IP: 10.0.1.1  |   |  IP: 10.0.1.2  |    |  IP: 10.0.1.3  |
+                    +-------+--------+   +-------+--------+    +-------+--------+
 
 
 ## Repository Overview
