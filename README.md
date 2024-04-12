@@ -1,6 +1,6 @@
 # cockroach-ansible
 
-![cockroach](./cockroach_db.jpg)
+![cockroach](./cockroach_db.png)
 
 ### How to use
 
